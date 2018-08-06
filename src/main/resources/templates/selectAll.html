@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>File System</title>
+</head>
+<body>
+<div align="center">
+    <form id="upload" method="POST" enctype="multipart/form-data" action="/upload">
+        <a>
+            文件：<input type="file" name="file" multiple="multiple"/>
+        </a>
+        <a>
+            <input type="submit" value="上传" onclick="sub()"/>
+        </a>
+    </form>
+</div>
+
+<div>
+    <table align="center">
+        <tr>
+            <th>UUID</th>
+            <th>SIZE</th>
+            <th>CREATEDATE</th>
+            <th>DOWNLOAD</th>
+            <th>DELETE</th>
+        </tr>
+        <tr th:each="fileInfo : ${page}">
+            <td th:text="${fileInfo.uuid}"></td>
+            <td th:text="${fileInfo.size}"></td>
+            <td th:text="${fileInfo.createDate}"></td>
+            <td><a th:href="@{/downLoad(uuid=${fileInfo.uuid})}">Download</a></td>
+            <td><a th:href="@{/delete(uuid=${fileInfo.uuid})}">Delete</a></td>
+        </tr>
+    </table>
+    <div align="center">
+        <a th:href="@{/selectAll(page=0)}">[首页]</a>
+        <a th:if="${not page.isFirst()}" th:href="@{/selectAll(page=${page.number-1})}">[上页]</a>
+        <a>共<a th:text="${page.totalPages}"></a>页 当前<a th:text="${page.number+1}"></a>页</a>
+        <a th:if="${not page.isLast()}" th:href="@{/selectAll(page=${page.number+1})}">[下页]</a>
+        <a th:href="@{/selectAll(page=${page.totalPages-1})}">[末页]</a>
+    </div>
+    <div align="center">
+        <form method="GET" action="/select">
+            <a>
+                UUID：<input type="test" name="uuid"/>
+            </a>
+            <a>
+                <input type="submit" value="查询"/>
+            </a>
+        </form>
+    </div>
+</div>
+</body>
+</html>
